@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib import auth
+from contacts.models import Contact
 
 
 # Create your views here.
@@ -23,21 +24,22 @@ def register(request):
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'That username is taken')
                 return redirect('register')
-            else: 
+            else:
                 if User.objects.filter(email=email).exists():
                     messages.error(request, 'That email is being used')
                     return redirect('register')
                 else:
                     # Proceed to login
                     user = User.objects.create_user(username=username, password=password, email=email,
-                    first_name=first_name, last_name=last_name)
+                                                    first_name=first_name, last_name=last_name)
 
                     # Login after register
                     user.save()
-                    messages.success(request, 'You are now registered and can log in')
+                    messages.success(
+                        request, 'You are now registered and can log in')
 
                     return redirect('login')
-     
+
             messages.error(request, 'Passwords do not match')
 
             return redirect('register')
@@ -53,31 +55,37 @@ def login(request):
         password = request.POST['password']
 
         user = auth.authenticate(username=username, password=password)
-        
+
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'You are now logged in')
 
             return redirect('dashboard')
-        
+
         else:
             messages.error(request, 'Invalid credentials')
-            
+
             return redirect('login')
 
     else:
         return render(request, 'accounts/login.html')
-        
 
 
 def logout(request):
     if request.method == 'POST':
-        #logout
+        # logout
         auth.logout(request)
         messages.success(request, 'You are now logged out')
-        
+
         return redirect('index')
 
 
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+
+    user_contacts = Contact.objects.order_by(
+        '-contact_date').filter(user_id=request.user.id)
+
+    context = {
+        'contacts': user_contacts
+    }
+    return render(request, 'accounts/dashboard.html', context)
