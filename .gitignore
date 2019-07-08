@@ -136,4 +136,9 @@ dmypy.json
 
 .DS_Store
 
+#vs-code
+
+.code-workspace
+
+
 # End of https://www.gitignore.io/api/django
