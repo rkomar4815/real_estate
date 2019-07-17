@@ -24,10 +24,12 @@ def register(request):
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'That username is taken')
                 return redirect('register')
+
             else:
                 if User.objects.filter(email=email).exists():
                     messages.error(request, 'That email is being used')
                     return redirect('register')
+
                 else:
                     # Proceed to login
                     user = User.objects.create_user(username=username, password=password, email=email,
