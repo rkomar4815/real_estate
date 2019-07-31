@@ -1,7 +1,7 @@
 # real_estate
 
 This is a a real estate website that I built as part of a course.
-It's built using Bootstrap 4, Django, and PostgreSQL, and deployed on Digital Ocean using Nginx and Gnuicorn. You can view the website at http://159.65.237.133/.
+It's built using Bootstrap 4, Django, and PostgreSQL, and deployed on Digital Ocean using Nginx and Gunicorn. You can view the website at http://159.65.237.133/.
 
 The website allows the user to:
 1. Login
